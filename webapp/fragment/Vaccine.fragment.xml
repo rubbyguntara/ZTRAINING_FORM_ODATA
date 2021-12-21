@@ -1,0 +1,5 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+	<SelectDialog id="idTableVaccine" confirm="onSelectedSearchHelpVaccine" title="Vaccine Type" items="{/VacTypeShSet}" search="onSearchVaccine" growingThreshold="10" >
+		<StandardListItem description="{VacTypeText}" title="{VacType}" type="Active"></StandardListItem>
+	</SelectDialog>
+</core:FragmentDefinition>

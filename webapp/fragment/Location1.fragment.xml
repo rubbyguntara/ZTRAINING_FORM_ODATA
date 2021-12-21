@@ -1,0 +1,5 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+	<SelectDialog id="idTableLocation1" confirm="onSelectedSearchHelpLocation1" title="Locations" items="{/VacLocShSet}" search="onSearchLocation1" growingThreshold="10" >
+		<StandardListItem description="{LocationText}" title="{LocationCode}" type="Active"></StandardListItem>
+	</SelectDialog>
+</core:FragmentDefinition>
