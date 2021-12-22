@@ -367,32 +367,71 @@ sap.ui.define([
 			}
 
 			this.getView().byId("idAge").setValue(diff);
+			this.validateForm();
+		},
+
+		validateForm: function() {
+			var oView = this.getView();
+			var aInputs = [
+				oView.byId("idPersno"),
+				oView.byId("idHeight"),
+				oView.byId("idWeight"),
+				oView.byId("idDateOfBirth")
+			];
+
+			var canContinue = true;
+			jQuery.each(aInputs, function(i, oInput) {
+				if (!aInputs[i].getValue()) {
+					aInputs[i].setValueState("Error");
+					canContinue = false;
+				} else {
+					aInputs[i].setValueState("None");
+					canContinue = true;
+				}
+			});
+
+			return canContinue;
 		},
 
 		onSubmit: function() {
 			var date1 = this.getView().byId("idVaccineDate1").getDateValue(),
 				date2 = this.getView().byId("idVaccineDate2").getDateValue();
 
-			var parameters = {
-				"Persno": this.getView().byId("idPersno").getValue(),
-				"Gender": this.getView().byId("idGender").getSelectedButton().getText(),
-				"Height": this.getView().byId("idHeight").getValue(),
-				"Weight": this.getView().byId("idWeight").getValue(),
-				"Age": this.getView().byId("idAge").getValue(),
-				"Vac1Type": this.getView().byId("idVaccine1").getSelectedKey(),
-				"Vac1Date": this.formatter.setDatePattern(date1),
-				"LocationCode1": this.getView().byId("idVaccineLoc1").getTooltip(),
-				"Vac1Org": this.getView().byId("idOrg1").getValue(),
-				"Vac1SideEffect": this.getView().byId("idSideEffect1").getValue(),
-				"Vac2Type": this.getView().byId("idVaccine2").getSelectedKey(),
-				"Vac2Date": this.formatter.setDatePattern(date2),
-				"LocationCode2": this.getView().byId("idVaccineLoc2").getTooltip(),
-				"Vac2Org": this.getView().byId("idOrg2").getValue(),
-				"Vac2SideEffect": this.getView().byId("idSideEffect2").getValue(),
-				"Note": this.getView().byId("idNote").getValue()
-			};
+			// if (!this.validateForm()) {
+			// 	alert("masih error");
+			// } else {
+				var parameters = {
+					"Persno": this.getView().byId("idPersno").getValue(),
+					"Gender": this.getView().byId("idGender").getSelectedButton().getText(),
+					"BloodType" : this.getView().byId("idSearchHelpBlood").getValue(),
+					"Height": this.getView().byId("idHeight").getValue(),
+					"Weight": this.getView().byId("idWeight").getValue(),
+					"Age": this.getView().byId("idAge").getValue(),
+					"Vac1Type": this.getView().byId("idVaccine1").getSelectedKey(),
+					"Vac1Date": this.formatter.setDatePattern(date1),
+					"LocationCode1": this.getView().byId("idVaccineLoc1").getTooltip(),
+					"Vac1Org": this.getView().byId("idOrg1").getValue(),
+					"Vac1SideEffect": this.getView().byId("idSideEffect1").getValue(),
+					"Vac2Type": this.getView().byId("idVaccine2").getSelectedKey(),
+					"Vac2Date": this.formatter.setDatePattern(date2),
+					"LocationCode2": this.getView().byId("idVaccineLoc2").getTooltip(),
+					"Vac2Org": this.getView().byId("idOrg2").getValue(),
+					"Vac2SideEffect": this.getView().byId("idSideEffect2").getValue(),
+					"Note": this.getView().byId("idNote").getValue()
+				};
 
-			console.log(parameters);
+				console.log(parameters);
+				var oModel = this.getView().getModel();
+				oModel.create("/EmpVacDataSet",parameters,{
+					success: jQuery.proxy(function(mResponse){
+						console.log(mResponse);
+					}, this),
+					error: jQuery.proxy(function(mResponse){
+						var obj = mResponse["message"];
+						alert(mResponse["message"] + " - " + mResponse["statusCode"] + " " + mResponse["statusText"]);
+					}, this)
+				});
+			// } // if (!this.validateForm())
 		}
 
 	});
