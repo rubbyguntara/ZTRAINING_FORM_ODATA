@@ -98,30 +98,35 @@
 				},
 				"async": true
 			},
-			"routes": [{
-				"pattern": "",
-				"name": "worklist",
-				"target": [
-					"worklist"
-				],
-				"subroutes": [{
-					"pattern": "create",
-					"name": "create",
+			"routes": [
+				{
+					"pattern": "",
+					"name": "listData",
 					"target": [
-						"createForm"
+						"listData"
+					],
+					"subroutes": [
+						{
+							"pattern": "create",
+							"name": "create",
+							"target": [
+								"createForm"
+							]
+						}
 					]
-				}]
-			}, {
-				"pattern": "EmpVacDataSet/{objectId}",
-				"name": "object",
-				"target": [
-					"object"
-				]
-			}],
+				},
+				{
+					"pattern": "EmpVacDataSet/{objectId}",
+					"name": "update",
+					"target": [
+						"update"
+					]
+				}
+			],
 			"targets": {
-				"worklist": {
-					"viewName": "Worklist",
-					"viewId": "worklist",
+				"listData": {
+					"viewName": "ListData",
+					"viewId": "listData",
 					"viewLevel": 1,
 					"title": "{i18n>worklistViewTitle}"
 				},
@@ -131,9 +136,9 @@
 					"viewLevel": 1,
 					"title": "{i18n>createVaccine}"
 				},
-				"object": {
-					"viewName": "Object",
-					"viewId": "object",
+				"update": {
+					"viewName": "Update",
+					"viewId": "update",
 					"viewLevel": 2,
 					"title": "{i18n>objectViewTitle}"
 				},
@@ -147,5 +152,9 @@
 				}
 			}
 		}
+	},
+	"sap.platform.abap": {
+		"uri": "/sap/bc/ui5_ui5/sap/ztrainingrubby1/webapp",
+		"_version": "1.1.0"
 	}
 }

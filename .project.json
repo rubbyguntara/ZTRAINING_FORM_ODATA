@@ -12,7 +12,8 @@
     "excludedFiles": [
       "test.html"
     ],
-    "buildRequired": true
+    "buildRequired": true,
+    "lastBuildDateTime": "Thu, 23 Dec 2021 02:37:04 GMT"
   },
   "dataBinding": {
     "/webapp/view/App.view.xml": {
@@ -24,10 +25,10 @@
     "/webapp/view/ObjectNotFound.view.xml": {
       "entitySet": "UNBINDKEY"
     },
-    "/webapp/view/Worklist.view.xml": {
+    "/webapp/view/ListData.view.xml": {
       "entitySet": "EmpVacDataSet"
     },
-    "/webapp/view/Object.view.xml": {
+    "/webapp/view/Update.view.xml": {
       "entitySet": "EmpVacDataSet"
     }
   },
@@ -63,5 +64,9 @@
     "notifyBeforePushLevel": "Error",
     "blockPush": false,
     "blockPushLevel": "Error"
+  },
+  "deploy": {
+    "destination": "S4H",
+    "name": "ZTRAININGRUBBY1"
   }
 }

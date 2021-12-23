@@ -1,11 +1,11 @@
-<mvc:View controllerName="xxxxrubby.ZTRAINING_FORM_ODATA.controller.Worklist" xmlns:html="http://www.w3.org/1999/xhtml"
+<mvc:View controllerName="xxxxrubby.ZTRAINING_FORM_ODATA.controller.ListData" xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns="sap.m">
 	<App>
 		<pages>
 			<Page title="{i18n>title}">
 				<content>
-					<Table id="table" width="auto" items="{ path: '/EmpVacDataSet', sorter: { path: 'Persno', descending: true } }"
-						noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+					<Table id="idWorklistTable" width="auto" mode="MultiSelect" items="{ path: '/EmpVacDataSet', sorter: { path: 'Persno', descending: true } }"
+						noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingThreshold="10" growingScrollToLoad="true"
 						updateFinished="onUpdateFinished">
 						<headerToolbar>
 							<Toolbar>
@@ -18,15 +18,24 @@
 							<Column id="nameColumn">
 								<Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
 							</Column>
-							<Column id="nameNumberColumn" hAlign="End">
+							<Column id="nameNumberColumn">
 								<Text text="{i18n>tableUnitNumberColumnTitle}" id="unitNumberColumnTitle"/>
+							</Column>
+							<Column id="actionColumn" hAlign="End">
+								<Text text="{i18n>Action}" id="actionColumnTitle"/>
 							</Column>
 						</columns>
 						<items>
-							<ColumnListItem type="Navigation" press="onPress">
+							<ColumnListItem>
 								<cells>
 									<ObjectIdentifier title="{Persno}"/>
 									<ObjectNumber unit="{Gender}"/>
+								</cells>
+								<cells>
+									<HBox alignContent="End" >
+										<Button id="buttonUpdateRow" icon="sap-icon://edit" type="Default" press="onPress"></Button>
+										<Button id="buttonDeleteRow" icon="sap-icon://delete" type="Reject" press="onSelectRowDelete"></Button>
+									</HBox>
 								</cells>
 							</ColumnListItem>
 						</items>
@@ -37,6 +46,7 @@
 					<Toolbar>
 						<!--<ToolbarSpacer></ToolbarSpacer>-->
 						<Button id="buttonSubmit" text="{i18n>Add}" icon="sap-icon://add" type="Accept" press="onAdd"></Button>
+						<Button id="buttonDelete" text="{i18n>Delete}" icon="sap-icon://delete" type="Reject" press="onSelectedDelete"></Button>
 					</Toolbar>
 				</footer>
 			</Page>

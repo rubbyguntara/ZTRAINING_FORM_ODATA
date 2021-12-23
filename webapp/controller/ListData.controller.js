@@ -9,7 +9,7 @@ sap.ui.define([
 ], function(BaseController, JSONModel, History, formatter, Filter, FilterOperator) {
 	"use strict";
 
-	return BaseController.extend("xxxxrubby.ZTRAINING_FORM_ODATA.controller.Worklist", {
+	return BaseController.extend("xxxxrubby.ZTRAINING_FORM_ODATA.controller.ListData", {
 
 		formatter: formatter,
 
@@ -184,7 +184,7 @@ sap.ui.define([
 		 * @private
 		 */
 		_showObject: function(oItem) {
-			this.getRouter().navTo("object", {
+			this.getRouter().navTo("update", {
 				objectId: oItem.getBindingContext().getProperty("Persno")
 			});
 		},
@@ -400,43 +400,100 @@ sap.ui.define([
 			// if (!this.validateForm()) {
 			// 	alert("masih error");
 			// } else {
-				var parameters = {
-					"Persno": this.getView().byId("idPersno").getValue(),
-					"Gender": this.getView().byId("idGender").getSelectedButton().getText(),
-					"BloodType" : this.getView().byId("idSearchHelpBlood").getValue(),
-					"Height": this.getView().byId("idHeight").getValue(),
-					"Weight": this.getView().byId("idWeight").getValue(),
-					"Age": this.getView().byId("idAge").getValue(),
-					"Vac1Type": this.getView().byId("idVaccine1").getSelectedKey(),
-					"Vac1Date": this.formatter.setDatePattern(date1),
-					"LocationCode1": this.getView().byId("idVaccineLoc1").getTooltip(),
-					"Vac1Org": this.getView().byId("idOrg1").getValue(),
-					"Vac1SideEffect": this.getView().byId("idSideEffect1").getValue(),
-					"Vac2Type": this.getView().byId("idVaccine2").getSelectedKey(),
-					"Vac2Date": this.formatter.setDatePattern(date2),
-					"LocationCode2": this.getView().byId("idVaccineLoc2").getTooltip(),
-					"Vac2Org": this.getView().byId("idOrg2").getValue(),
-					"Vac2SideEffect": this.getView().byId("idSideEffect2").getValue(),
-					"Note": this.getView().byId("idNote").getValue()
-				};
+			var parameters = {
+				"Persno": this.getView().byId("idPersno").getValue(),
+				"Gender": this.getView().byId("idGender").getSelectedButton().getText(),
+				"BloodType": this.getView().byId("idSearchHelpBlood").getValue(),
+				"Height": this.getView().byId("idHeight").getValue(),
+				"Weight": this.getView().byId("idWeight").getValue(),
+				"Age": this.getView().byId("idAge").getValue(),
+				"Vac1Type": this.getView().byId("idVaccine1").getSelectedKey(),
+				"Vac1Date": this.formatter.setDatePattern(date1),
+				"LocationCode1": this.getView().byId("idVaccineLoc1").getTooltip(),
+				"Vac1Org": this.getView().byId("idOrg1").getValue(),
+				"Vac1SideEffect": this.getView().byId("idSideEffect1").getValue(),
+				"Vac2Type": this.getView().byId("idVaccine2").getSelectedKey(),
+				"Vac2Date": this.formatter.setDatePattern(date2),
+				"LocationCode2": this.getView().byId("idVaccineLoc2").getTooltip(),
+				"Vac2Org": this.getView().byId("idOrg2").getValue(),
+				"Vac2SideEffect": this.getView().byId("idSideEffect2").getValue(),
+				"Note": this.getView().byId("idNote").getValue()
+			};
 
-				console.log(parameters);
-				var oModel = this.getView().getModel();
-				oModel.create("/EmpVacDataSet",parameters,{
-					success: jQuery.proxy(function(mResponse){
-						console.log(mResponse);
-					}, this),
-					error: jQuery.proxy(function(mResponse){
-						var obj = mResponse["message"];
-						alert(mResponse["message"] + " - " + mResponse["statusCode"] + " " + mResponse["statusText"]);
-					}, this)
-				});
+			console.log(parameters);
+			var oModel = this.getView().getModel();
+			oModel.create("/EmpVacDataSet", parameters, {
+				success: jQuery.proxy(function(mResponse) {
+					console.log(mResponse);
+				}, this),
+				error: jQuery.proxy(function(mResponse) {
+					var obj = mResponse["message"];
+					alert(mResponse["message"] + " - " + mResponse["statusCode"] + " " + mResponse["statusText"]);
+				}, this)
+			});
 			// } // if (!this.validateForm())
 		},
-		
-		onAdd: function(){
-			this.getRouter().navTo("create",{
 
+		onAdd: function() {
+			this.getRouter().navTo("create", {
+
+			});
+		},
+
+		onSelectedDelete: function(oEvent) {
+			var oTable = this.getView().byId("idWorklistTable");
+			var idx = oTable.indexOfItem(oTable.getSelectedItem());
+
+			if (idx !== -1) {
+				var oItems = oTable.getSelectedItems();
+				var oSelectedItems = [];
+				var oModel = this.getView().getModel();
+				oModel.setDeferredGroups(['group1']);
+
+				for (var i = 0; i < oItems.length; i++) {
+					// console.log(oItems[i].getBindingContext().getObject());
+					// oSelectedItems.push(oItems[i].getBindingContext().getObject());
+					var oSelected = oItems[i].getBindingContext().getObject();
+					var persno = oSelected.Persno;
+					var changeSetId = "changeSetId" + persno;
+
+					console.log(persno);
+					oModel.remove("/EmpVacDataSet('" + persno + "')", {
+						groupId: persno,
+						changeSetId: changeSetId,
+						success: this.successCallback,
+						error: this.errorCallback
+					});
+
+					oModel.submitChanges({
+						groupId: persno
+					});
+				}
+				this.getRouter().navTo("listData", {});
+				oTable.clearSelection();
+			} else {
+				alert("Please Select an Item");
+			}
+		},
+		
+		onSelectRowDelete: function(oEvent){
+			// The source is the list item that got pressed
+			this._deleteRow(oEvent.getSource());
+		},
+		
+		_deleteRow: function(oItem) {
+			var persno = oItem.getBindingContext().getProperty("Persno");                     
+			var oModel = this.getView().getModel();
+			oModel.remove("/EmpVacDataSet('" + persno + "')", {
+				success: jQuery.proxy(function(mResponse) {
+					console.log(mResponse);
+					this.getRouter().navTo("listData", {});
+
+				}, this),
+				error: jQuery.proxy(function(mResponse) {
+					var obj = mResponse["message"];
+					alert(mResponse["message"] + " - " + mResponse["statusCode"] + " " + mResponse["statusText"]);
+				}, this)
 			});
 		}
 

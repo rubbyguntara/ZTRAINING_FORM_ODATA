@@ -1,19 +1,19 @@
 /*global location history */
 sap.ui.define([
-		"xxxxrubby/ZTRAINING_FORM_ODATA/controller/BaseController";
-		"sap/ui/model/json/JSONModel";
-		"sap/ui/core/routing/History";
-		"xxxxrubby/ZTRAINING_FORM_ODATA/model/formatter";
-		"sap/ui/model/Filter";
+		"xxxxrubby/ZTRAINING_FORM_ODATA/controller/BaseController",
+		"sap/ui/model/json/JSONModel",
+		"sap/ui/core/routing/History",
+		"xxxxrubby/ZTRAINING_FORM_ODATA/model/formatter",
+		"sap/ui/model/Filter",
 		"sap/ui/model/FilterOperator"
-	];
+	],
 
-	function(BaseController; JSONModel; History; formatter; Filter; FilterOperator) {
+	function(BaseController, JSONModel, History, formatter, Filter, FilterOperator) {
 		"use strict";
 
-		return BaseController.extend("xxxxrubby.ZTRAINING_FORM_ODATA.controller.Create"; {
+		return BaseController.extend("xxxxrubby.ZTRAINING_FORM_ODATA.controller.Create", {
 
-			formatter: formatter;
+			formatter: formatter,
 
 			/* =========================================================== */
 			/* lifecycle methods                                           */
@@ -24,9 +24,9 @@ sap.ui.define([
 			 * @public
 			 */
 			onInit: function() {
-				var oViewModel;
-				iOriginalBusyDelay;
-				oTable = this.byId("table");
+				var oViewModel,
+					iOriginalBusyDelay,
+					oTable = this.byId("table");
 
 				// Put down worklist table's original value for busy indicator delay;
 				// so it can be restored later on. Busy handling on the table is
@@ -37,16 +37,15 @@ sap.ui.define([
 
 				// Model used to manipulate control states
 				oViewModel = new JSONModel({
-					worklistTableTitle: this.getResourceBundle().getText("worklistTableTitle");
-					saveAsTileTitle: this.getResourceBundle().getText("saveAsTileTitle"; this.getResourceBundle().getText("worklistViewTitle"));
-					shareOnJamTitle: this.getResourceBundle().getText("worklistTitle");
-					shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailWorklistSubject");
-					shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailWorklistMessage";
-						[location.href]);
-					tableNoDataText: this.getResourceBundle().getText("tableNoDataText");
+					worklistTableTitle: this.getResourceBundle().getText("worklistTableTitle"),
+					saveAsTileTitle: this.getResourceBundle().getText("saveAsTileTitle", this.getResourceBundle().getText("worklistViewTitle")),
+					shareOnJamTitle: this.getResourceBundle().getText("worklistTitle"),
+					shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailWorklistSubject"),
+					shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailWorklistMessage", [location.href]),
+					tableNoDataText: this.getResourceBundle().getText("tableNoDataText"),
 					tableBusyDelay: 0
 				});
-				this.setModel(oViewModel;
+				this.setModel(oViewModel,
 					"worklistView");
 
 				// Make sure; busy indication is showing immediately so there is no
@@ -58,17 +57,17 @@ sap.ui.define([
 				// });
 				// Add the worklist page to the flp routing history
 				this.addHistoryEntry({
-					title: this.getResourceBundle().getText("worklistViewTitle");
-					icon: "sap-icon://table-view";
+					title: this.getResourceBundle().getText("worklistViewTitle"),
+					icon: "sap-icon://table-view",
 					intent: "#TrainingFormOdata-display"
-				}; true);
+				}, true);
 
 				sap.ui.core.UIComponent.getRouterFor(this).attachRouteMatched(this.onRouteMatched, this);
-			};
+			},
 
 			onAfterRendering: function() {
 
-			};
+			},
 
 			/* =========================================================== */
 			/* event handlers                                              */
@@ -101,22 +100,21 @@ sap.ui.define([
 				this.getView().byId("idSideEffect2").setValue();
 				this.getView().byId("idNote").setValue();
 			},
-			
+
 			onUpdateFinished: function(oEvent) {
 				// update the worklist's object counter after the table update
-				var sTitle;
-				oTable = oEvent.getSource();
-				iTotalItems = oEvent.getParameter("total");
+				var sTitle,
+					oTable = oEvent.getSource(),
+					iTotalItems = oEvent.getParameter("total");
 				// only update the counter if the length is final and
 				// the table is not empty
 				if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-					sTitle = this.getResourceBundle().getText("worklistTableTitleCount";
-						[iTotalItems]);
+					sTitle = this.getResourceBundle().getText("worklistTableTitleCount", [iTotalItems]);
 				} else {
 					sTitle = this.getResourceBundle().getText("worklistTableTitle");
 				}
-				this.getModel("worklistView").setProperty("/worklistTableTitle"; sTitle);
-			};
+				this.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
+			},
 
 			/**
 			 * Event handler when a table item gets pressed
@@ -126,25 +124,25 @@ sap.ui.define([
 			onPress: function(oEvent) {
 				// The source is the list item that got pressed
 				this._showObject(oEvent.getSource());
-			};
+			},
 
 			/**
 			 * Event handler when the share in JAM button has been clicked
 			 * @public
 			 */
 			onShareInJamPress: function() {
-				var oViewModel = this.getModel("worklistView");
-				oShareDialog = sap.ui.getCore().createComponent({
-					name: "sap.collaboration.components.fiori.sharing.dialog";
-					settings: {
-						object: {
-							id: location.href;
-							share: oViewModel.getProperty("/shareOnJamTitle")
+				var oViewModel = this.getModel("worklistView"),
+					oShareDialog = sap.ui.getCore().createComponent({
+						name: "sap.collaboration.components.fiori.sharing.dialog",
+						settings: {
+							object: {
+								id: location.href,
+								share: oViewModel.getProperty("/shareOnJamTitle")
+							}
 						}
-					}
-				});
+					});
 				oShareDialog.open();
-			};
+			},
 
 			onSearch: function(oEvent) {
 				if (oEvent.getParameters().refreshButtonPressed) {
@@ -158,12 +156,12 @@ sap.ui.define([
 					var sQuery = oEvent.getParameter("query");
 
 					if (sQuery && sQuery.length > 0) {
-						aTableSearchState = [new Filter("Persno"; FilterOperator.Contains; sQuery)];
+						aTableSearchState = [new Filter("Persno", FilterOperator.Contains, sQuery)];
 					}
 					this._applySearch(aTableSearchState);
 				}
 
-			};
+			},
 
 			/**
 			 * Event handler for refresh event. Keeps filter; sort
@@ -173,7 +171,7 @@ sap.ui.define([
 			onRefresh: function() {
 				var oTable = this.byId("table");
 				oTable.getBinding("items").refresh();
-			};
+			},
 
 			/* =========================================================== */
 			/* internal methods                                            */
@@ -186,10 +184,10 @@ sap.ui.define([
 			 * @private
 			 */
 			_showObject: function(oItem) {
-				this.getRouter().navTo("object"; {
+				this.getRouter().navTo("object", {
 					objectId: oItem.getBindingContext().getProperty("Persno")
 				});
-			};
+			},
 
 			/**
 			 * Internal helper method to apply both filter and search state together on the list binding
@@ -197,28 +195,28 @@ sap.ui.define([
 			 * @private
 			 */
 			_applySearch: function(aTableSearchState) {
-				var oTable = this.byId("table");
-				oViewModel = this.getModel("worklistView");
-				oTable.getBinding("items").filter(aTableSearchState;
+				var oTable = this.byId("table"),
+					oViewModel = this.getModel("worklistView");
+				oTable.getBinding("items").filter(aTableSearchState,
 					"Application");
 				// changes the noDataText of the list in case there are no filter results
 				if (aTableSearchState.length !== 0) {
-					oViewModel.setProperty("/tableNoDataText"; this.getResourceBundle().getText("worklistNoDataWithSearchText"));
+					oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("worklistNoDataWithSearchText"));
 				}
-			};
+			},
 
 			// To call Fragment Location
 			onPressVaccineLoc1: function() {
 				var dialogSearchHelpLocation1 = this._getDialogSearchHelpLocation1();
 
 				dialogSearchHelpLocation1.open();
-			};
+			},
 			_getDialogSearchHelpLocation1: function() {
 				if (this.dialogSearchHelpLocation1) {
 					return this.dialogSearchHelpLocation1;
 				}
 
-				this.dialogSearchHelpLocation1 = sap.ui.xmlfragment("xxxxrubby.ZTRAINING_FORM_ODATA.fragment.Location1"; this);
+				this.dialogSearchHelpLocation1 = sap.ui.xmlfragment("xxxxrubby.ZTRAINING_FORM_ODATA.fragment.Location1", this);
 				this.getView().addDependent(this.dialogSearchHelpLocation1);
 
 				//debug untuk cari id button cancel
@@ -230,30 +228,30 @@ sap.ui.define([
 				// dialogSearchHelp._getCancelButton().setType("Reject");
 
 				return this.dialogSearchHelpLocation1;
-			};
+			},
 			onSelectedSearchHelpLocation1: function(oEvent) {
 				var selectedItem = oEvent.getParameter("selectedItem");
 				this.getView().byId("idVaccineLoc1").setValue(selectedItem.getTitle() + " - " + selectedItem.getDescription());
 				this.getView().byId("idVaccineLoc1").setTooltip(selectedItem.getTitle());
-			};
+			},
 			onSearchLocation1: function(oEvent) {
 				var sValue = oEvent.getParameter("value");
-				var oFilter = new Filter("LocationText"; FilterOperator.Contains; sValue);
+				var oFilter = new Filter("LocationText", FilterOperator.Contains, sValue);
 				var oBinding = oEvent.getParameter("itemsBinding");
 				oBinding.filter([oFilter]);
-			};
+			},
 
 			onPressVaccineLoc2: function() {
 				var dialogSearchHelpLocation2 = this._getDialogSearchHelpLocation2();
 
 				dialogSearchHelpLocation2.open();
-			};
+			},
 			_getDialogSearchHelpLocation2: function() {
 				if (this.dialogSearchHelpLocation2) {
 					return this.dialogSearchHelpLocation2;
 				}
 
-				this.dialogSearchHelpLocation2 = sap.ui.xmlfragment("xxxxrubby.ZTRAINING_FORM_ODATA.fragment.Location2"; this);
+				this.dialogSearchHelpLocation2 = sap.ui.xmlfragment("xxxxrubby.ZTRAINING_FORM_ODATA.fragment.Location2", this);
 				this.getView().addDependent(this.dialogSearchHelpLocation2);
 
 				//debug untuk cari id button cancel
@@ -265,33 +263,33 @@ sap.ui.define([
 				// dialogSearchHelp._getCancelButton().setType("Reject");
 
 				return this.dialogSearchHelpLocation2;
-			};
+			},
 			onSelectedSearchHelpLocation2: function(oEvent) {
 				var selectedItem = oEvent.getParameter("selectedItem");
 				this.getView().byId("idVaccineLoc2").setValue(selectedItem.getTitle() + " - " + selectedItem.getDescription());
 				this.getView().byId("idVaccineLoc2").setTooltip(selectedItem.getTitle());
-			};
+			},
 			onSearchLocation2: function(oEvent) {
 				var sValue = oEvent.getParameter("value");
-				var oFilter = new Filter("LocationText"; FilterOperator.Contains; sValue);
+				var oFilter = new Filter("LocationText", FilterOperator.Contains, sValue);
 				var oBinding = oEvent.getParameter("itemsBinding");
 
 				console.log(oBinding);
 				oBinding.filter([oFilter]);
-			};
+			},
 
 			// to call fragment blood
 			onPressSearchHelpBlood: function() {
 				var dialogSearchHelpBlood = this._getDialogSearchHelpBlood();
 
 				dialogSearchHelpBlood.open();
-			};
+			},
 			_getDialogSearchHelpBlood: function() {
 				if (this.dialogSearchHelpBlood) {
 					return this.dialogSearchHelpBlood;
 				}
 
-				this.dialogSearchHelpBlood = sap.ui.xmlfragment("xxxxrubby.ZTRAINING_FORM_ODATA.fragment.Blood"; this);
+				this.dialogSearchHelpBlood = sap.ui.xmlfragment("xxxxrubby.ZTRAINING_FORM_ODATA.fragment.Blood", this);
 				this.getView().addDependent(this.dialogSearchHelpBlood);
 
 				//debug untuk cari id button cancel
@@ -303,31 +301,31 @@ sap.ui.define([
 				// dialogSearchHelp._getCancelButton().setType("Reject");
 
 				return this.dialogSearchHelpBlood;
-			};
+			},
 			onSelectedSearchHelpBlood: function(oEvent) {
 				var selectedItem = oEvent.getParameter("selectedItems");
 				console.log(selectedItem[0].getTitle());
 				this.getView().byId("idSearchHelpBlood").setValue(selectedItem[0].getTitle());
-			};
+			},
 			onSearchBlood: function(oEvent) {
 				var sValue = oEvent.getParameter("value");
-				var oFilter = new Filter("BloodType"; FilterOperator.Contains; sValue);
+				var oFilter = new Filter("BloodType", FilterOperator.Contains, sValue);
 				var oBinding = oEvent.getParameter("itemsBinding");
 				oBinding.filter([oFilter]);
-			};
+			},
 
 			// to call fragment Vaccine
 			onPressSearchHelpVaccine: function() {
 				var dialogSearchHelpVaccine = this._getDialogSearchHelpVaccine();
 
 				dialogSearchHelpVaccine.open();
-			};
+			},
 			_getDialogSearchHelpVaccine: function() {
 				if (this.dialogSearchHelpVAccine) {
 					return this.dialogSearchHelpVaccine;
 				}
 
-				this.dialogSearchHelpVaccine = sap.ui.xmlfragment("xxxxrubby.ZTRAINING_FORM_ODATA.fragment.Vaccine"; this);
+				this.dialogSearchHelpVaccine = sap.ui.xmlfragment("xxxxrubby.ZTRAINING_FORM_ODATA.fragment.Vaccine", this);
 				this.getView().addDependent(this.dialogSearchHelpVaccine);
 
 				//debug untuk cari id button cancel
@@ -339,18 +337,18 @@ sap.ui.define([
 				// dialogSearchHelp._getCancelButton().setType("Reject");
 
 				return this.dialogSearchHelpVaccine;
-			};
+			},
 			onSelectedSearchHelpVaccine: function(oEvent) {
 				var selectedItem = oEvent.getParameter("selectedItems");
 				console.log(selectedItem[0].getTitle());
 				this.getView().byId("idSearchHelpVaccine").setValue(selectedItem[0].getTitle());
-			};
+			},
 			onSearchVaccine: function(oEvent) {
 				var sValue = oEvent.getParameter("value");
-				var oFilter = new Filter("VacTypeText"; FilterOperator.Contains; sValue);
+				var oFilter = new Filter("VacTypeText", FilterOperator.Contains, sValue);
 				var oBinding = oEvent.getParameter("itemsBinding");
 				oBinding.filter([oFilter]);
-			};
+			},
 
 			onDateChanged: function(oEvent) {
 				var today = new Date();
@@ -371,21 +369,21 @@ sap.ui.define([
 
 				this.getView().byId("idAge").setValue(diff);
 				this.validateForm();
-			};
+			},
 
 			validateForm: function() {
 				var oView = this.getView();
 				var aInputs = [
-					oView.byId("idPersno");
-					oView.byId("idHeight");
-					oView.byId("idWeight");
+					oView.byId("idPersno"),
+					oView.byId("idHeight"),
+					oView.byId("idWeight"),
 					oView.byId("idDateOfBirth")
 				];
 
 				var canContinue = true;
-				jQuery.each(aInputs;
+				jQuery.each(aInputs,
 
-					function(i; oInput) {
+					function(i, oInput) {
 						if (!aInputs[i].getValue()) {
 							aInputs[i].setValueState("Error");
 							canContinue = false;
@@ -396,47 +394,47 @@ sap.ui.define([
 					});
 
 				return canContinue;
-			};
+			},
 
 			onSubmit: function() {
-				var date1 = this.getView().byId("idVaccineDate1").getDateValue();
-				date2 = this.getView().byId("idVaccineDate2").getDateValue();
+				var date1 = this.getView().byId("idVaccineDate1").getDateValue(),
+					date2 = this.getView().byId("idVaccineDate2").getDateValue();
 
 				// if (!this.validateForm()) {
 				// 	alert("masih error");
 				// } else {
 				var parameters = {
-					"Persno": this.getView().byId("idPersno").getValue();
-					"Gender": this.getView().byId("idGender").getSelectedButton().getText();
-					"BloodType": this.getView().byId("idSearchHelpBlood").getValue();
-					"Height": this.getView().byId("idHeight").getValue();
-					"Weight": this.getView().byId("idWeight").getValue();
-					"Age": this.getView().byId("idAge").getValue();
-					"Vac1Type": this.getView().byId("idVaccine1").getSelectedKey();
-					"Vac1Date": this.formatter.setDatePattern(date1);
-					"LocationCode1": this.getView().byId("idVaccineLoc1").getTooltip();
-					"Vac1Org": this.getView().byId("idOrg1").getValue();
-					"Vac1SideEffect": this.getView().byId("idSideEffect1").getValue();
-					"Vac2Type": this.getView().byId("idVaccine2").getSelectedKey();
-					"Vac2Date": this.formatter.setDatePattern(date2);
-					"LocationCode2": this.getView().byId("idVaccineLoc2").getTooltip();
-					"Vac2Org": this.getView().byId("idOrg2").getValue();
-					"Vac2SideEffect": this.getView().byId("idSideEffect2").getValue();
+					"Persno": this.getView().byId("idPersno").getValue(),
+					"Gender": this.getView().byId("idGender").getSelectedButton().getText(),
+					"BloodType": this.getView().byId("idSearchHelpBlood").getValue(),
+					"Height": this.getView().byId("idHeight").getValue(),
+					"Weight": this.getView().byId("idWeight").getValue(),
+					"Age": this.getView().byId("idAge").getValue(),
+					"Vac1Type": this.getView().byId("idVaccine1").getSelectedKey(),
+					"Vac1Date": this.formatter.setDatePattern(date1),
+					"LocationCode1": this.getView().byId("idVaccineLoc1").getTooltip(),
+					"Vac1Org": this.getView().byId("idOrg1").getValue(),
+					"Vac1SideEffect": this.getView().byId("idSideEffect1").getValue(),
+					"Vac2Type": this.getView().byId("idVaccine2").getSelectedKey(),
+					"Vac2Date": this.formatter.setDatePattern(date2),
+					"LocationCode2": this.getView().byId("idVaccineLoc2").getTooltip(),
+					"Vac2Org": this.getView().byId("idOrg2").getValue(),
+					"Vac2SideEffect": this.getView().byId("idSideEffect2").getValue(),
 					"Note": this.getView().byId("idNote").getValue()
 				};
 
 				console.log(parameters);
 				var oModel = this.getView().getModel();
-				oModel.create("/EmpVacDataSet"; parameters; {
+				oModel.create("/EmpVacDataSet", parameters, {
 					success: jQuery.proxy(function(mResponse) {
 						console.log(mResponse);
-						this.getRouter().navTo("worklist"; {});
+						this.getRouter().navTo("worklist", {});
 
-					}; this);
+					}, this),
 					error: jQuery.proxy(function(mResponse) {
 						var obj = mResponse["message"];
 						alert(mResponse["message"] + " - " + mResponse["statusCode"] + " " + mResponse["statusText"]);
-					}; this)
+					}, this)
 				});
 
 				this.onAfterRendering();

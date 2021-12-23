@@ -16,7 +16,7 @@ sap.ui.define([
 ) {
 	"use strict";
 
-	return BaseController.extend("xxxxrubby.ZTRAINING_FORM_ODATA.controller.Object", {
+	return BaseController.extend("xxxxrubby.ZTRAINING_FORM_ODATA.controller.Update", {
 
 		formatter: formatter,
 
@@ -38,7 +38,7 @@ sap.ui.define([
 					delay: 0
 				});
 
-			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
+			this.getRouter().getRoute("update").attachPatternMatched(this._onObjectMatched, this);
 
 			// Store original busy indicator delay, so it can be restored later on
 			iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
@@ -52,7 +52,7 @@ sap.ui.define([
 		},
 
 		onAfterRendering: function() {
-
+			this.disableInputs();
 		},
 
 		/* =========================================================== */
@@ -63,6 +63,46 @@ sap.ui.define([
 		 * Event handler when the share in JAM button has been clicked
 		 * @public
 		 */
+		disableInputs: function() {
+			this.getView().byId("idSearchHelpBlood").setEditable(false);
+			this.getView().byId("idGender").setEditable(false);
+			this.getView().byId("idHeight").setEditable(false);
+			this.getView().byId("idWeight").setEditable(false);
+			this.getView().byId("idDateOfBirth").setEditable(false);
+			this.getView().byId("idAge").setEditable(false);
+			this.getView().byId("idVaccine1").setEditable(false);
+			this.getView().byId("idVaccineDate1").setEditable(false);
+			this.getView().byId("idVaccineLoc1").setEditable(false);
+			this.getView().byId("idOrg1").setEditable(false);
+			this.getView().byId("idSideEffect1").setEditable(false);
+			this.getView().byId("idVaccine2").setEditable(false);
+			this.getView().byId("idVaccineDate2").setEditable(false);
+			this.getView().byId("idVaccineLoc2").setEditable(false);
+			this.getView().byId("idOrg2").setEditable(false);
+			this.getView().byId("idSideEffect2").setEditable(false);
+			this.getView().byId("idNote").setEditable(false);
+			this.getView().byId("idButtonUpdate").setVisible(false);
+		},
+		enableInputs: function() {
+			this.getView().byId("idSearchHelpBlood").setEditable(true);
+			this.getView().byId("idGender").setEditable(true);
+			this.getView().byId("idHeight").setEditable(true);
+			this.getView().byId("idWeight").setEditable(true);
+			this.getView().byId("idDateOfBirth").setEditable(true);
+			this.getView().byId("idAge").setEditable(false);
+			this.getView().byId("idVaccine1").setEditable(true);
+			this.getView().byId("idVaccineDate1").setEditable(true);
+			this.getView().byId("idVaccineLoc1").setEditable(true);
+			this.getView().byId("idOrg1").setEditable(true);
+			this.getView().byId("idSideEffect1").setEditable(true);
+			this.getView().byId("idVaccine2").setEditable(true);
+			this.getView().byId("idVaccineDate2").setEditable(true);
+			this.getView().byId("idVaccineLoc2").setEditable(true);
+			this.getView().byId("idOrg2").setEditable(true);
+			this.getView().byId("idSideEffect2").setEditable(true);
+			this.getView().byId("idNote").setEditable(true);
+			this.getView().byId("idButtonUpdate").setVisible(true);
+		},
 		onRouteMatched: function() {
 			this.getView().byId("idPersno").setText();
 			this.getView().byId("idSearchHelpBlood").setValue();
@@ -383,6 +423,16 @@ sap.ui.define([
 				}, this)
 			});
 			// } // if (!this.validateForm())
+		},
+
+		onChangeSwitch: function(oEvent) {
+			var mode = this.getView().byId("idSwitch").getState();
+
+			if (mode === true) {
+				this.enableInputs();
+			} else {
+				this.disableInputs();
+			}
 		}
 
 	});
