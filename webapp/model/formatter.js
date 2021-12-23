@@ -23,6 +23,18 @@ sap.ui.define([], function() {
 
 			sDate = dateFormat.format(sDate);
 			return sDate;
+		},
+		changeGender: function(sGender){
+			if (!sGender) {
+				return 0;
+			}
+			
+			sGender = sGender.toUpperCase();
+			if(sGender === "MALE"){
+				return 0;
+			}else{
+				return 1;
+			}
 		}
 
 	};

@@ -3,142 +3,43 @@
 	<App>
 		<pages>
 			<Page title="{i18n>title}">
-				<f:SimpleForm id="fSimpleForm" layout="ResponsiveGridLayout" editable="true" title="Vaccine Data" labelSpanXL="3" labelSpanL="3" labelSpanM="3"
-					labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
-					singleContainerFullSize="false">
-					<f:content>
-						<Label text="{i18n>Personnel Number}" design="{i18n>labelBold}"></Label>
-						<Input id="idPersno" placeholder="Enter Personnel Number"></Input>
-						<Label text="{i18n>Gender}" design="{i18n>labelBold}"></Label>
-						<RadioButtonGroup id="idGender">
-							<RadioButton text="Male"></RadioButton>
-							<RadioButton text="Female"></RadioButton>
-						</RadioButtonGroup>
-						<Label text="{i18n>searchHelpBlood}" design="{i18n>labelBold}"></Label>
-						<Input id="idSearchHelpBlood" valueHelpRequest="onPressSearchHelpBlood" showValueHelp="true" valueHelpOnly="true"></Input>
-						<Label text="{i18n>Height}" design="{i18n>labelBold}"></Label>
-						<Input id="idHeight" placeholder="Enter Height"></Input>
-						<Label text="{i18n>Weight}" design="{i18n>labelBold}"></Label>
-						<Input id="idWeight" placeholder="Enter Weight"></Input>
-						<Label text="{i18n>input}" design="{i18n>labelBold}"></Label>
-						<Label text="{i18n>dateOfBirth}" design="{i18n>labelBold}"></Label>
-						<DatePicker id="idDateOfBirth" required="true" change="onDateChanged"></DatePicker>
-						<Input id="idAge" editable="false"></Input>
-						<!--Vaccine 1-->
-						<Label text="{i18n>vaccineType1}" design="{i18n>labelBold}"></Label>
-						<!--<Input id="idSearchHelpVaccine" valueHelpRequest="onPressSearchHelpVaccine" showValueHelp="true" valueHelpOnly="true" editable="true"></Input>-->
-						<ComboBox id="idVaccine1" items="{/VacTypeShSet}">
-							<core:Item text="{VacTypeText}" key="{VacType}"></core:Item>
-						</ComboBox>
-						<Label text="{i18n>vaccineDate1}" design="{i18n>labelBold}"></Label>
-						<DatePicker id="idVaccineDate1" required="true"></DatePicker>
-						<Label text="{i18n>vaccineLoc1}" design="{i18n>labelBold}"></Label>
-						<Input id="idVaccineLoc1" valueHelpRequest="onPressVaccineLoc1" showValueHelp="true" valueHelpOnly="true"></Input>
-						<Label text="{i18n>vaccineOrg1}" design="{i18n>labelBold}"></Label>
-						<Input id="idOrg1" placeholder="Enter Organization"></Input>
-						<Label text="{i18n>sideEffect1}" design="{i18n>labelBold}"></Label>
-						<TextArea id="idSideEffect1" showExceededText="true" maxLength="250" liveChange="onLiveChangeTextArea" valueState="Error"
-							valueStateText="Teu Kenging Kosong Jang"></TextArea>
-						
-						<!--Vaccine 2-->
-						<Label text="{i18n>vaccineType1}" design="{i18n>labelBold}"></Label>
-						<!--<Input id="idSearchHelpVaccine" valueHelpRequest="onPressSearchHelpVaccine" showValueHelp="true" valueHelpOnly="true" editable="true"></Input>-->
-						<ComboBox id="idVaccine2" items="{/VacTypeShSet}">
-							<core:Item text="{VacTypeText}" key="{VacType}"></core:Item>
-						</ComboBox>
-						<Label text="{i18n>vaccineDate2}" design="{i18n>labelBold}"></Label>
-						<DatePicker id="idVaccineDate2" required="true"></DatePicker>
-						<Label text="{i18n>vaccineLoc2}" design="{i18n>labelBold}"></Label>
-						<Input id="idVaccineLoc2" valueHelpRequest="onPressVaccineLoc2" showValueHelp="true" valueHelpOnly="true"></Input>
-						<Label text="{i18n>vaccineOrg1}" design="{i18n>labelBold}"></Label>
-						<Input id="idOrg2" placeholder="Enter Organization"></Input>
-						<Label text="{i18n>sideEffect1}" design="{i18n>labelBold}"></Label>
-						<TextArea id="idSideEffect2" showExceededText="true" maxLength="250" liveChange="onLiveChangeSideEffect2" valueState="Error"
-							valueStateText="Teu Kenging Kosong Jang"></TextArea>
-						<Label text="{i18n>note}" design="{i18n>labelBold}"></Label>
-						<TextArea id="idNote" showExceededText="true" maxLength="500" liveChange="onLiveChangeNote" valueState="Error"
-							valueStateText="Teu Kenging Kosong Jang"></TextArea>
-						<!--xmlns:f="sap.ui.layout.form"-->
-					</f:content>
-				</f:SimpleForm>
+				<content>
+					<Table id="table" width="auto" items="{ path: '/EmpVacDataSet', sorter: { path: 'Persno', descending: true } }"
+						noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+						updateFinished="onUpdateFinished">
+						<headerToolbar>
+							<Toolbar>
+								<Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>
+								<ToolbarSpacer/>
+								<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search="onSearch" width="auto"></SearchField>
+							</Toolbar>
+						</headerToolbar>
+						<columns>
+							<Column id="nameColumn">
+								<Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
+							</Column>
+							<Column id="nameNumberColumn" hAlign="End">
+								<Text text="{i18n>tableUnitNumberColumnTitle}" id="unitNumberColumnTitle"/>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem type="Navigation" press="onPress">
+								<cells>
+									<ObjectIdentifier title="{Persno}"/>
+									<ObjectNumber unit="{Gender}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</content>
 				<content></content>
 				<footer>
 					<Toolbar>
-						<ToolbarSpacer></ToolbarSpacer>
-						<Button text="{i18n>Submit}" type="Accept" press="onSubmit"></Button>
-						<Button text="{i18n>Cancel}" type="Reject"></Button>
+						<!--<ToolbarSpacer></ToolbarSpacer>-->
+						<Button id="buttonSubmit" text="{i18n>Add}" icon="sap-icon://add" type="Accept" press="onAdd"></Button>
 					</Toolbar>
 				</footer>
 			</Page>
 		</pages>
 	</App>
 </mvc:View>
-<!--<mvc:View-->
-<!--	controllerName="xxxxrubby.ZTRAINING_FORM_ODATA.controller.Worklist"-->
-<!--	xmlns="sap.m"-->
-<!--	xmlns:mvc="sap.ui.core.mvc"-->
-<!--	xmlns:semantic="sap.f.semantic"-->
-<!--	xmlns:footerbar="sap.ushell.ui.footerbar">-->
-<!--	<semantic:SemanticPage-->
-<!--		id="page"-->
-<!--		headerPinnable="false"-->
-<!--		toggleHeaderOnTitleClick="false">-->
-<!--		<semantic:titleHeading>-->
-<!--			<Title text="{i18n>worklistTitle}" />-->
-<!--		</semantic:titleHeading>-->
-<!--		<semantic:content>-->
-<!--			<Table-->
-<!--				id="table"-->
-<!--				width="auto"-->
-<!--				items="{-->
-<!--					path: '/EmpVacDataSet',-->
-<!--					sorter: {-->
-<!--						path: 'Persno',-->
-<!--						descending: false-->
-<!--					}-->
-<!--				}"-->
-<!--				noDataText="{worklistView>/tableNoDataText}"-->
-<!--				busyIndicatorDelay="{worklistView>/tableBusyDelay}"-->
-<!--				growing="true"-->
-<!--				growingScrollToLoad="true"-->
-<!--				updateFinished="onUpdateFinished">-->
-<!--				<headerToolbar>-->
-<!--					<Toolbar>-->
-<!--						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>-->
-<!--						<ToolbarSpacer />-->
-<!--						<SearchField-->
-<!--							id="searchField"-->
-<!--							tooltip="{i18n>worklistSearchTooltip}"-->
-<!--							search="onSearch"-->
-<!--							width="auto">-->
-<!--						</SearchField>-->
-<!--					</Toolbar>-->
-<!--				</headerToolbar>-->
-<!--				<columns>-->
-<!--					<Column id="nameColumn">-->
-<!--						<Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>-->
-<!--					</Column>-->
-<!--				</columns>-->
-<!--				<items>-->
-<!--					<ColumnListItem-->
-<!--						type="Navigation"-->
-<!--						press="onPress">-->
-<!--						<cells>-->
-<!--							<ObjectIdentifier-->
-<!--								title="{Persno}"/>-->
-<!--						</cells>-->
-<!--					</ColumnListItem>-->
-<!--				</items>-->
-<!--			</Table>-->
-<!--		</semantic:content>-->
-<!--		<semantic:sendEmailAction>-->
-<!--			<semantic:SendEmailAction id="shareEmail" press="onShareEmailPress"/>-->
-<!--		</semantic:sendEmailAction>-->
-<!--		<semantic:shareInJamAction>-->
-<!--			<semantic:ShareInJamAction id="shareInJam" visible="{FLP>/isShareInJamActive}" press="onShareInJamPress"/>-->
-<!--		</semantic:shareInJamAction>-->
-<!--		<semantic:saveAsTileAction>-->
-<!--			<footerbar:AddBookmarkButton id ="shareTile" title="{worklistView>/saveAsTileTitle}" />-->
-<!--		</semantic:saveAsTileAction>-->
-<!--	</semantic:SemanticPage>-->
-<!--</mvc:View>-->

@@ -98,28 +98,38 @@
 				},
 				"async": true
 			},
-			"routes": [
-				{
-					"pattern": "",
-					"name": "worklist",
+			"routes": [{
+				"pattern": "",
+				"name": "worklist",
+				"target": [
+					"worklist"
+				],
+				"subroutes": [{
+					"pattern": "create",
+					"name": "create",
 					"target": [
-						"worklist"
+						"createForm"
 					]
-				},
-				{
-					"pattern": "EmpVacDataSet/{objectId}",
-					"name": "object",
-					"target": [
-						"object"
-					]
-				}
-			],
+				}]
+			}, {
+				"pattern": "EmpVacDataSet/{objectId}",
+				"name": "object",
+				"target": [
+					"object"
+				]
+			}],
 			"targets": {
 				"worklist": {
 					"viewName": "Worklist",
 					"viewId": "worklist",
 					"viewLevel": 1,
 					"title": "{i18n>worklistViewTitle}"
+				},
+				"createForm": {
+					"viewName": "Create",
+					"viewId": "createForm",
+					"viewLevel": 1,
+					"title": "{i18n>createVaccine}"
 				},
 				"object": {
 					"viewName": "Object",

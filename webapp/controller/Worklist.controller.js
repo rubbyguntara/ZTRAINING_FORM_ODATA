@@ -61,31 +61,31 @@ sap.ui.define([
 		},
 
 		onAfterRendering: function() {
-			var vDate1 = this.getView().byId("idDateOfBirth"),
-				vDate2 = this.getView().byId("idVaccineDate1"),
-				vDate3 = this.getView().byId("idVaccineDate2"),
-				today = new Date();
+			// var vDate1 = this.getView().byId("idDateOfBirth"),
+			// 	vDate2 = this.getView().byId("idVaccineDate1"),
+			// 	vDate3 = this.getView().byId("idVaccineDate2"),
+			// 	today = new Date();
 
-			//set max date
-			vDate2.setMaxDate(today);
-			vDate3.setMaxDate(today);
+			// //set max date
+			// vDate2.setMaxDate(today);
+			// vDate3.setMaxDate(today);
 
-			//disable manual input datepicker
-			vDate1.addDelegate({
-				onAfterRendering: function() {
-					vDate1.$().find("input").attr("Disabled", true).css("color", "red");
-				}
-			}, vDate1);
-			vDate2.addDelegate({
-				onAfterRendering: function() {
-					vDate2.$().find("input").attr("Disabled", true).css("color", "red");
-				}
-			}, vDate2);
-			vDate3.addDelegate({
-				onAfterRendering: function() {
-					vDate3.$().find("input").attr("Disabled", true).css("color", "red");
-				}
-			}, vDate3);
+			// //disable manual input datepicker
+			// vDate1.addDelegate({
+			// 	onAfterRendering: function() {
+			// 		vDate1.$().find("input").attr("Disabled", true).css("color", "red");
+			// 	}
+			// }, vDate1);
+			// vDate2.addDelegate({
+			// 	onAfterRendering: function() {
+			// 		vDate2.$().find("input").attr("Disabled", true).css("color", "red");
+			// 	}
+			// }, vDate2);
+			// vDate3.addDelegate({
+			// 	onAfterRendering: function() {
+			// 		vDate3.$().find("input").attr("Disabled", true).css("color", "red");
+			// 	}
+			// }, vDate3);
 		},
 
 		/* =========================================================== */
@@ -432,6 +432,12 @@ sap.ui.define([
 					}, this)
 				});
 			// } // if (!this.validateForm())
+		},
+		
+		onAdd: function(){
+			this.getRouter().navTo("create",{
+
+			});
 		}
 
 	});
